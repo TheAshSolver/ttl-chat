@@ -43,11 +43,26 @@ close it.
 ## Learn Basics of g++ CLI
 
 - Compile the TCP client and server using `g++` from command line.
+  g++ src/tcp_echo_client.cc -o client
+   g++ src/tcp_echo_server.cc -o server
 - What are the most important command line arguments to learn for `g++`?
+
+ The names of the source files (.cpp or .c ) files, the name of the output files and along with some compiler flags
+
 - What is the difference between debug vs release versions?
+
+Debug version of software refers to the executables that have some information that can be used to debug the code using debuggers, like gdb. Release versions are more optimized as they need ot have maximum performance and efficiency
+
 - What are the tradeoffs between debug and release versions?
+
+Debug versions need to ensure that any error or bug in the final output is identified and solved, while release versions need to ensure that they have maximum performance and efficiency. 
+Debug versions of the output, especially binary, are generally larger, as they have more information and they tend to have a decreased performance due to keeping track of any undefined behaviour. Meanwhile, release versions are heavily optimized while not having the ability to identify errors. 
+
 - What arguments would you use in a debug build?
+  The compiler flags to be used alongside G++ would be -Wall -Wextra and -g
+
 - What about for release?
+  -02 - for optimization
 - What other kinds of build types are useful?
 
 ## Learn Basics of Make
@@ -56,15 +71,21 @@ close it.
 - [Quickstart tutorial to make](https://makefiletutorial.com/) - Learn make 
   fundamentals with practical examples and common patterns.
 - How else can you learn about make?
+  There is make documentation available at GNU's main website.
 - How can you tell if the resource you are using is correct?
+  I personally do the following. Check to see if the resource is of an official entity or organization instead of a single user, like the GNU, or see if they have cited sources. I also use cross referencing to identify good sources
 - Create a makefile such that when you run `make` with no arguments, it will:
   - Create `build/` directory if it does not exist
   - Create executables **client** and **server** in `build/`, if needed
   - How does make know when it needs to rebuild the executables?
+  Make checks the timestamps to see if any of the prerequisites have been updated after the last creation of the target file
   - Change your Makefile such that `make clean` will remove `build/` and all
     its contents
+
 - What are the most important command line arguments to learn for make?
+From my current research, make only accepts the targets as command line arguments, using them to specify exactly which commands need to run
 - What are the most important directives to learn about in Makefile?
+
 - What are the most important commands to implement in your Makefile?
 - Which ones are essential, which ones are nice to haves?
 
