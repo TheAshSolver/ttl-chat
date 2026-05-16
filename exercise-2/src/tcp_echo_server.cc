@@ -5,6 +5,8 @@
 #include <unistd.h>
 
 const int kBufferSize = 1024;
+//I realized during my refactoring that I deleted the question. While it is there in a previous commit, I will type my answer here
+//Yes, while true is necessary to keep the server alive. It is not very inefficient because accept is a blocking call, meaning cpu wont be doing any work until accept gets a message.
 
 int setup_socket(int kport){
 

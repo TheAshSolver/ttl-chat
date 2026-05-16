@@ -123,9 +123,14 @@ Debug versions of the output, especially binary, are generally larger, as they h
 - What are the most important command line arguments to learn for make?
 From my current research, make only accepts the targets as command line arguments, using them to specify exactly which commands need to run
 - What are the most important directives to learn about in Makefile?
-
+I think the most important directive would be .PHONY as it can be used to make clean. ifeq is also important
 - What are the most important commands to implement in your Makefile?
+
+I think all and clean are the most important
+
 - Which ones are essential, which ones are nice to haves?
+
+all is essential while clean is a nice to have.
 
 ## Learn Basics of Git
 
@@ -160,7 +165,9 @@ Header files help improve the modularity of the codebase. The working of header 
 From what I know, documentation, like cppreference.com
 - How do you change the code so that you are sending messages to servers
   other than localhost?
+
   We mention the IP address of the server and the appropriate port in our client code, specifically, in the sock_addr struct we pass into the connect function
+
 - How do you change the code to send to a IPv6 address instead of IPv4?
 We replace AF_INET with AF_INET6 in all places.,
 - **Bonus**: How do you change the client code to connect by hostname instead
@@ -228,8 +235,12 @@ The respective RFCs.
 
 AI is a much broader concept that refers to a wide range of techniques, including LLMs, Machine learning and neural networks, while LLMs refer to one particular implementation that predicts the next token in a series of tokens. 
 - Is it grammatically correct in English to say "a LLM" or "an LLM"? Why?
-I think a LLM because L is not a vowel
+I think it is a LLM and because L is not a vowel.
 
 
 
+### What caught me by surprise and what I need to work on
+Make files. I feel I did not give enough depth to the makefiles questions. I should have spent more time practising makefiles.  I am also not very confident about the difference between debug and release versions of code as I did not anticipate that coming up.
 
+### How to improve
+I should have spent more time actually implementing whatever I was reading. I feel this was the biggest shortcoming of my plan. 

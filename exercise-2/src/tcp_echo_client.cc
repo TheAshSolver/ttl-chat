@@ -43,6 +43,7 @@ void connect_to_server(int sock, sockaddr_in &server_address) {
 void send_and_receive_message(int sock, const std::string &message) {
   const int kBufferSize = 1024;
   // #Question - is buffer the best name we can use?
+  // We can use received_buffer as that is more clear and appropriate
   char buffer[kBufferSize] = {0};
 
   // Send the message to the server
