@@ -6,101 +6,82 @@
 
 const int kBufferSize = 1024;
 
-int create_socket() {
-  int my_sock;
-  if ((my_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-    std::cerr << "Socket creation error\n";
-    exit(EXIT_FAILURE);
-  }
-  return my_sock;
-}
+int setup_socket(int kport){
 
-bool set_socket_options(int sock, int opt) {
-  if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
-                 sizeof(opt)) < 0) {
-    std::cerr << "setsockopt() error\n";
-    close(sock);
-    exit(EXIT_FAILURE);
-  }
-  return true;
-}
-
-sockaddr_in create_address(int port) {
   sockaddr_in address;
-  address.sin_family = AF_INET;
   address.sin_addr.s_addr = INADDR_ANY;
-  address.sin_port = htons(port);
-  return address;
-}
+  address.sin_port = htons(kport);
+  address.sin_family = AF_INET;
 
-void bind_address_to_socket(int sock, sockaddr_in &address) {
-  if (bind(sock, (sockaddr *)&address, sizeof(address)) < 0) {
-    std::cerr << "bind failed\n";
-    close(sock);
+  int sockfd;
+  if((sockfd=socket(AF_INET, SOCK_STREAM, 0))<0){
+    std::cerr<<"Socket creation failed";
     exit(EXIT_FAILURE);
   }
-}
-
-void listen_on_socket(int sock) {
-  if (listen(sock, 3) < 0) {
-    std::cerr << "listen failed\n";
-    close(sock);
+  int socket_options = 1;
+  if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &socket_options, sizeof(socket_options))<0){
+    std::cerr << "Socket options failed";
     exit(EXIT_FAILURE);
   }
-}
 
-void start_listening_on_socket(int my_socket, sockaddr_in &address) {
-  const int kSocketOptions = 1;
-  set_socket_options(my_socket, kSocketOptions);
-
-  bind_address_to_socket(my_socket, address);
-  listen_on_socket(my_socket);
-}
-
-void handle_accept(int client_socket) {
-  char buffer[kBufferSize] = {0};
-  ssize_t valread = read(client_socket, buffer, kBufferSize);
-
-  if (valread > 0) {
-    std::cout << "Received: " << buffer << "\n";
-    send(client_socket, buffer, valread, 0);
-    std::cout << "Echo message sent\n";
-  } else if (valread == 0) {
-    std::cout << "Client disconnected.\n";
-  } else {
-    std::cerr << "Read error on client socket " << client_socket << "\n";
+  if(setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT, &socket_options, sizeof(socket_options))<0){
+    std::cerr << "Socket options failed";
+    exit(EXIT_FAILURE);
   }
-  close(client_socket);
+
+
+  if(bind(sockfd,(struct sockaddr *)&address, sizeof(address))<0){
+    std::cerr << "Binding failed";
+    exit(EXIT_FAILURE);
+  }
+
+  if(listen(sockfd, 3)<0){
+     std::cerr << "Listening failed";
+    exit(EXIT_FAILURE);
+  }
+  std::cout<<"Server listening on port " << kport << std::endl;
+
+  return sockfd;
 }
 
-void handle_connections(int sock, int port) {
-  sockaddr_in address = create_address(port);
-  socklen_t address_size = sizeof(address);
 
-  // #Question - is it good to have an infinite loop?
-  //in this case yes, because we need the server to be on all the time to accept new connections. Accept is also a blocking call, meaning, CPU does not do any work while accept still has not received anything. So not an inefficient method here. 
-  while (true) {
-    int accepted_socket = accept(sock, (sockaddr *)&address, &address_size);
-    if (accepted_socket < 0) {
-      std::cerr << "accept error\n";
-      // we continue to accept new connections if possible
+//accepts new users and receives data from them as well
+void handle_socket(int sock_fd){
+  while(true){
+    sockaddr_storage connection;
+    socklen_t size = sizeof(connection);
+    int new_socket = accept(sock_fd, (sockaddr *) &connection, &size);
+
+    if(new_socket<0){
+      std::cerr<< "Error with accepted socket";
       continue;
     }
-    handle_accept(accepted_socket);
+
+
+    char buffer[kBufferSize]={0};
+    ssize_t received_data = recv(new_socket, buffer, kBufferSize, 0);
+    if(received_data>0){
+       std::cout << "Received: " << buffer << "\n";
+       send(new_socket, buffer, received_data, 0); 
+       std::cout << "Echo message sent\n";
+    }
+    else if (received_data == 0) {
+     std::cout << "Client disconnected.\n";
+     } else {
+       std::cerr << "Read error on client socket " << new_socket << "\n";
+   }
+    close(new_socket);
   }
+
 }
 
-int main() {
-  const int kPort = 8080;
-  int my_socket = create_socket();
-  sockaddr_in address = create_address(kPort);
-
-  // #Question - is there a better name for this function?
-  
-  start_listening_on_socket(my_socket, address);
-  std::cout << "Server listening on port " << kPort << "\n";
-  handle_connections(my_socket, kPort);
+int main(){
+  int port = 8080;
+  int my_socket = setup_socket(port);
+  handle_socket(my_socket);
   close(my_socket);
+
+
 
   return 0;
 }

@@ -7,8 +7,6 @@
 int main() {
   const int kPort = 8080;
   sockaddr_in address;
-  std::string small_mesage="h";
-  std::string message = "hello I am the world king trule and the man who ruled them all";
   socklen_t addrlen = sizeof(address);
   const int kBufferSize = 1024;
   char buffer[kBufferSize] = {0};
