@@ -228,14 +228,14 @@ The respective RFCs.
   The ISO standard of C++
 - What information can you find about using Markdown when structuring prompts 
   to LLMs?
-
+Markdowns are better when interacting with LLMs as LLMs are trained on lots of markdown and they have much better separation of context, and have more structure.
 
 - What is the difference between LLM and AI?
 
 
 AI is a much broader concept that refers to a wide range of techniques, including LLMs, Machine learning and neural networks, while LLMs refer to one particular implementation that predicts the next token in a series of tokens. 
 - Is it grammatically correct in English to say "a LLM" or "an LLM"? Why?
-I think it is a LLM and because L is not a vowel.
+It is an LLM.
 
 
 
