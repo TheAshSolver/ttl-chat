@@ -6,11 +6,13 @@
 
 - What's an easy way to identify the changes in source code from one exercise
   to another?
-    
+  Using git diff to see the difference in commits or using diff terminal tool to compare files. We can use vscode's compare feature.
 ## Using Classes
 
 - Here is one way to separate out the code into multiple files
 - Is this the best way to do it? 
+I feel like all methods have their advantages and disadvantages, but using namespaces is always optimal as it reduces variables being mistaken from each other and encapsulates code fairly well. 
+
 - What are the advantages and disadvantages?
 
 ## Introduction to Namespace

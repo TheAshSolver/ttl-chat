@@ -6,22 +6,23 @@
 
 const int kBufferSize = 1024;
 
-int create_socket() {
-  int my_sock;
-  if ((my_sock = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-    std::cerr << "Socket creation error\n";
+void check_error(bool condition, std::string comment){
+  if(condition){
+    std::cerr<< comment << std::endl;
     exit(EXIT_FAILURE);
   }
+}
+
+
+int create_socket() {
+  int my_sock = socket(AF_INET, SOCK_STREAM, 0);
+  check_error(my_sock<0, "Socket creation error\n");
   return my_sock;
 }
 
 bool set_socket_options(int sock, int opt) {
-  if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
-                 sizeof(opt)) < 0) {
-    std::cerr << "setsockopt() error\n";
-    close(sock);
-    exit(EXIT_FAILURE);
-  }
+  check_error(setsockopt(sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &opt,
+                 sizeof(opt)) < 0, "setsockopt() error\n");
   return true;
 }
 
@@ -34,19 +35,12 @@ sockaddr_in create_address(int port) {
 }
 
 void bind_address_to_socket(int sock, sockaddr_in &address) {
-  if (bind(sock, (sockaddr *)&address, sizeof(address)) < 0) {
-    std::cerr << "bind failed\n";
-    close(sock);
-    exit(EXIT_FAILURE);
-  }
+  check_error(bind(sock, (sockaddr *)&address, sizeof(address)) < 0,"bind failed\n");
+
 }
 
 void listen_on_socket(int sock) {
-  if (listen(sock, 3) < 0) {
-    std::cerr << "listen failed\n";
-    close(sock);
-    exit(EXIT_FAILURE);
-  }
+  check_error(listen(sock, 3) < 0,"listen failed\n");
 }
 
 void start_listening_on_socket(int my_socket, sockaddr_in &address) {
@@ -80,11 +74,7 @@ void handle_connections(int sock, int port) {
   // #Task - is it good to have an infinite loop?
   while (true) {
     int accepted_socket = accept(sock, (sockaddr *)&address, &address_size);
-    if (accepted_socket < 0) {
-      std::cerr << "accept error\n";
-      // we continue to accept new connections if possible
-      continue;
-    }
+    check_error(accepted_socket<0, "accept error\n");
     handle_accept(accepted_socket);
   }
 }

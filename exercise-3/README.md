@@ -7,8 +7,23 @@
 - Read the code in `src/tcp_echo_client.cc`
 - A new function `check_error()` has been created and `create_socket()` from 
   exercise-2 has been refactored to make use of it
-- What are the benefits of writing code in this way?
+- What are the benefits of writing code in this way?      
+
+
+
+Answer: The main benefit of this is that code is modular and can be reused. The lack of repetition reduces bugs and increases development time. This also helps debugging as we can identify where errors are. 
+
+Such ways of coding also help up with uniformity as the same behaviour is available everywhere. 
+
+
+
+
 - Are there any costs to writing code like this?
+
+In this case, there are no errors as the compiler automatically inlines the function because of its small size. If the functions are too big, there mnay be performance issues as we need a function call, which has a overheads, such as updating stack pointer.
+
+There may be problems if the function has to deal with many possible cases and have different functionality, which will increase the size of the function. 
+
 - Apply `check_error` to all the code in `src/`
 
 ## Introduction to Compiler Explorer
@@ -20,6 +35,9 @@
 - Can you think of any different approaches to this problem?
 - How can you modify your Makefile to generate assembly code instead of
   compiled code?
+
+We can add a -S flag to the g++ command. 
+
 - **Note**: You can save the generated assembly from Compiler Explorer
 - **Bonus**: Can you view assembly code using your IDE?
 - **Bonus**: How do you see the assembly when you step through each line in
@@ -32,11 +50,14 @@
 - Make sure you have `-fsanitize=address` in both your `CXX_FLAGS` and 
   `LD_FLAGS` in your Makefile
 - What do `-fsanitize=address`, `CXX_FLAGS` and `LD_FLAGS` mean?
+-fsanitize=address is the ASan, address sanitizer. It helps identify memory leaks, unintialized variable access and more. It is a tool used in debugging and profiling. 
+CXX_FLAGS and LD_FLAGS are conventional variable names for compiler and linker flags respectively. 
+
 - With the new tool of the Compiler Explorer, and keeping in mind what you 
   have learned about how to use debug mode
 - What happens when you look at a `std::string` using the above methods?
 - Where is the text in your `std::string`?
-- What is `std::optional`?
+- What is `std::optional`?.
 - How do you find out the memory layout of a `std::optional`?
 - Read https://en.cppreference.com/w/cpp/memory#Smart_pointers - Guide to 
   modern C++ memory management using smart pointers
